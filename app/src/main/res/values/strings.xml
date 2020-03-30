@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Lab3_2</string>
+    <string name="app_name">Lab3</string>
+    <string name="title">DataBase app</string>
+    <string name="button1">Show</string>
+    <string name="button2">Add</string>
+    <string name="button3">Change last to default</string>
+    <string name="titleIdStr">ID</string>
+    <string name="titleNameStr">ФИО</string>
+    <string name="titleTimeStr">Время создания</string>
 </resources>
