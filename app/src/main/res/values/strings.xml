@@ -5,6 +5,8 @@
     <string name="button2">Add</string>
     <string name="button3">Change last to default</string>
     <string name="titleIdStr">ID</string>
-    <string name="titleNameStr">ФИО</string>
+    <string name="titleSurnameStr">Фамилия</string>
+    <string name="titleNameStr">Имя</string>
+    <string name="titleFathernameStr">Отчество</string>
     <string name="titleTimeStr">Время создания</string>
 </resources>

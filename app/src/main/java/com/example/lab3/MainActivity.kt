@@ -23,19 +23,21 @@ class MainActivity : AppCompatActivity() {
         db.delete(FeedReaderContract.FeedEntry.TABLE_NAME, null, null)
 
         for (i in 0..4) {
-            var str = ""
+            val str : Array<String> = Array(3, {""})
             val r : Random = Random()
             var num : Int = r.nextInt(6)
-            str += resources.getStringArray(R.array.surnames)[num] + " "
+            str[0] = resources.getStringArray(R.array.surnames)[num] + " "
             num = r.nextInt(6)
-            str += resources.getStringArray(R.array.names)[num] + " "
+            str[1] = resources.getStringArray(R.array.names)[num] + " "
             num = r.nextInt(6)
-            str += resources.getStringArray(R.array.fathernames)[num]
+            str[2] = resources.getStringArray(R.array.fathernames)[num]
 
             val dateFormat = SimpleDateFormat("HH:mm:ss dd.MM.yyyy")
 
             val values = ContentValues().apply {
-                put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, str)
+                put(FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME, str[0])
+                put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, str[1])
+                put(FeedReaderContract.FeedEntry.COLUMN_NAME_FATHERNAME, str[2])
                 put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME, dateFormat.format(Date()))
             }
             db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values)
@@ -56,9 +58,13 @@ class MainActivity : AppCompatActivity() {
             val dbHelper = FeedReaderDbHelper(this)
             val db = dbHelper.writableDatabase
 
+            val match = Regex("\\w+").find(str)
+
             val dateFormat = SimpleDateFormat("HH:mm:ss dd.MM.yyyy")
             val values = ContentValues().apply {
-                put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, str)
+                put(FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME, match?.value)
+                put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, match?.next()?.value)
+                put(FeedReaderContract.FeedEntry.COLUMN_NAME_FATHERNAME, match?.next()?.next()?.value)
                 put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME, dateFormat.format(Date()))
             }
             db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values)
@@ -83,14 +89,16 @@ class MainActivity : AppCompatActivity() {
         )
 
         cursor.moveToLast()
-        val time = cursor.getString(2)
+        val time = cursor.getString(4)
 
         db.delete(FeedReaderContract.FeedEntry.TABLE_NAME, "${FeedReaderContract.FeedEntry.COLUMN_NAME_NAME}" +
                 "= \'${cursor.getString(1)}\'", null)
 
         val dateFormat = SimpleDateFormat("HH:mm:ss dd.MM.yyyy")
         val values = ContentValues().apply {
-            put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, "Иванов Иван Иванович")
+            put(FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME, "Иванов")
+            put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, "Иван")
+            put(FeedReaderContract.FeedEntry.COLUMN_NAME_FATHERNAME, "Иванович")
             put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME, time)
         }
         db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values)
